@@ -16,7 +16,8 @@ const createUser = async (req, res) => {
         return res.status(201).send({ data: userWithoutPassword })
     } catch (error) {
         console.log(error)
-        return res.status(500).send({ message: 'Internal server error' })
+        if (error.code === 11000) return res.status(406).send({ message: 'This email has been taken.' })
+        else return res.status(500).send({ message: 'Internal server error' })
     }
 }
 

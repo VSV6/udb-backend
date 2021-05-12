@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
                 return res.status(200).send({ access, user: { email, _id: isUser._id, name: isUser.name } })
             }
             else
-                return res.status(401).send({ message: `User with email ${email} is unauthorized.` })
+                return res.status(401).send({ message: `Either email or password is wrong.` })
         }
         else
             return res.status(404).send({ message: `No user with email ${email}.` })

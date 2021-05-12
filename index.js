@@ -28,7 +28,7 @@ app.use('/udb/api/v1/like', likeRoutes)
 app.use('/udb/api/v1/post', postRoutes)
 app.use('/udb/api/v1/user', userRoutes)
 
-mongoose.connect(isProd(), { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(isProd(), { useCreateIndex: true, useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Successfully connected to mongodb!!')
         app.listen(PORT, () => console.log(`Server is running on port ${PORT}.`))

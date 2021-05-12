@@ -18,7 +18,8 @@ app.use('/udb/api/v1/like', likeRoutes)
 app.use('/udb/api/v1/post', postRoutes)
 app.use('/udb/api/v1/user', userRoutes)
 
-mongoose.connect('mongodb://localhost:27017/udb', { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
+// mongodb://localhost:27017/udb
+mongoose.connect('mongodb+srv://vivek_s:WbmDB66k@cluster0.onedp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Successfully connected to mongodb!!')
         app.listen(PORT, () => console.log(`Server is running on port ${PORT}.`))

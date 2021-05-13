@@ -9,7 +9,7 @@ const { authRoutes, commentRoutes, likeRoutes, postRoutes, userRoutes } = requir
 const app = express()
 const PORT = process.env.PORT || 4000
 const isProd = () => {
-    if (process.env.isProd == 'true') {
+    if (process.env.IS_PROD === 'true') {
         console.log('MongoDB is connected to prod.')
         return 'mongodb+srv://vivek_s:WbmDB66k@cluster0.onedp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     }

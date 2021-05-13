@@ -15,6 +15,7 @@ const addComment = async (req, res) => {
 
     try {
         req.body.commented_by = uid
+        req.body.for_post = pid
 
         const comment = await Comment.create(req.body)
 

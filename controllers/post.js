@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { Post, User } = require('../models')
+const { Comment, Post, User } = require('../models')
 
 const isProvidedIdValid = (id) => mongoose.isValidObjectId(id)
 
@@ -34,6 +34,8 @@ const deletePost = async (req, res) => {
     if (!isProvidedIdValid(pid)) return res.status(404).send({ message: `No post with id ${pid}.` })
 
     try {
+        await Comment.deleteMany({ for_post: pid })
+
         await Post.findByIdAndDelete(pid)
 
         await User.findByIdAndUpdate(uid, { $pull: { posts: pid } })

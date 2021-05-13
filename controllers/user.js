@@ -64,7 +64,10 @@ const updateUser = async (req, res) => {
     if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with email ${req.body.email}` })
 
     try {
+        req.body.password = await bcrypt.hash(req.body.password, 10)
+
         const user = await User.findByIdAndUpdate(id, req.body, { new: true })
+
         return res.status(200).send({ data: user })
     } catch (error) {
         console.log(error)

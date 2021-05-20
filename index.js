@@ -11,7 +11,6 @@ const isProd = () => {
     if (process.env.IS_PROD === 'true') {
         console.log('MongoDB is connected to prod.')
         return process.env.MONGODB_ATLAS
-        // 'mongodb+srv://vivek_s:WbmDB66k@cluster0.onedp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     }
     else {
         console.log('MongoDB is connected to dev.')

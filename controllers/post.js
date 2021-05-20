@@ -1,3 +1,4 @@
+const cloudinary = require('../utils/cloudinary')
 const mongoose = require('mongoose')
 
 const { Comment, Post, User } = require('../models')
@@ -11,13 +12,14 @@ const createPost = async (req, res) => {
     if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with id ${id}.` })
 
     try {
-        const { body, file, hostname, protocol } = req
+        const { body, file } = req
+        const { url } = await cloudinary.uploader.upload(file.path)
         const { filename } = file
 
         body.created_by = id
         body.photo = {
             name: filename,
-            url: `${protocol}://${hostname}:4000/uploads/${filename}`
+            url
         }
 
         const post = await Post.create(body)

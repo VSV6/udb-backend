@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const cloudinary = require('../utils/cloudinary')
 const mongoose = require('mongoose')
 
 const { User } = require('../models')
@@ -64,9 +65,10 @@ const updateUser = async (req, res) => {
     if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with email ${req.body.email}` })
 
     try {
-        const { body, file, hostname, protocol } = req
+        const { body, file } = req
+        const { url } = await cloudinary.uploader.upload(file.path)
         body.password = await bcrypt.hash(body.password, 10)
-        body.photo = `${protocol}://${hostname}:4000/uploads/${file.filename}`
+        body.photo = url
 
         const user = await User.findByIdAndUpdate(id, body, { new: true })
 

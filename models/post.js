@@ -5,7 +5,7 @@ const postSchema = Schema({
     created_by: { type: Schema.Types.ObjectId, ref: 'User' },
     description: String,
     likes: [{ type: Schema.Types.ObjectId, ref: "Like" }],
-    photo: String,
+    photo: {},
     title: String
 },
     {

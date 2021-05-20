@@ -1,26 +1,29 @@
 require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const Cors = require('cors')
 const mongoose = require('mongoose')
 
 const { authRoutes, commentRoutes, likeRoutes, postRoutes, userRoutes } = require('./routes')
 
 const app = express()
-const PORT = process.env.PORT || 4000
 const isProd = () => {
     if (process.env.IS_PROD === 'true') {
         console.log('MongoDB is connected to prod.')
-        return 'mongodb+srv://vivek_s:WbmDB66k@cluster0.onedp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+        return process.env.MONGODB_ATLAS
+        // 'mongodb+srv://vivek_s:WbmDB66k@cluster0.onedp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
     }
     else {
         console.log('MongoDB is connected to dev.')
         return 'mongodb://localhost:27017/udb'
     }
 }
+const PORT = process.env.PORT || 4000
 
-app.use(bodyParser.json())
+// Cors should be on top of the bodyparser otherwise it'll give cors error
 app.use(Cors())
+app.use(express.json())
+app.use(express.static('public'))
 
 app.use('/udb/api/v1/auth', authRoutes)
 app.use('/udb/api/v1/comment', commentRoutes)

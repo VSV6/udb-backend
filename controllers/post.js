@@ -11,10 +11,16 @@ const createPost = async (req, res) => {
     if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with id ${id}.` })
 
     try {
+        const { body, file, hostname, protocol } = req
+        const { filename } = file
 
-        req.body.created_by = id
+        body.created_by = id
+        body.photo = {
+            name: filename,
+            url: `${protocol}://${hostname}:4000/uploads/${filename}`
+        }
 
-        const post = await Post.create(req.body)
+        const post = await Post.create(body)
 
         await User.findByIdAndUpdate(id, { $push: { posts: post._id } })
 
@@ -88,6 +94,7 @@ const getPosts = async (req, res) => {
                 }
             })
             .populate('likes', "name")
+            .sort({ 'createdAt': 'desc' })
             .exec()
 
         return res.status(200).send({ data: post })

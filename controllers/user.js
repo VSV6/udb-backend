@@ -7,7 +7,6 @@ const { User } = require('../models')
 const isProvidedIdValid = (id) => mongoose.isValidObjectId(id)
 
 const createUser = async (req, res) => {
-    console.log(req.body)
     try {
         req.body.password = await bcrypt.hash(req.body.password, 10)
 

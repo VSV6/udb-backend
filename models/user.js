@@ -10,10 +10,6 @@ const userSchema = Schema({
         select: false,
         type: String
     },
-    phone: {
-        select: false,
-        type: Number
-    },
     photo: {
         default: 'https://images.unsplash.com/photo-1587445104203-e4aaf3994e57?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         type: String

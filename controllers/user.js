@@ -65,12 +65,7 @@ const updateUser = async (req, res) => {
     if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with email ${req.body.email}` })
 
     try {
-        const { body, file } = req
-        const { url } = await cloudinary.uploader.upload(file.path)
-        body.password = await bcrypt.hash(body.password, 10)
-        body.photo = url
-
-        const user = await User.findByIdAndUpdate(id, body, { new: true })
+        const user = await User.findByIdAndUpdate(id, req.body, { new: true })
 
         return res.status(200).send({ data: user })
     } catch (error) {
@@ -79,4 +74,43 @@ const updateUser = async (req, res) => {
     }
 }
 
-module.exports = { createUser, deleteUser, getUser, getUsers, updateUser }
+const updateUserPassword = async (req, res) => {
+    let id = req.params.id
+
+    if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with email ${req.body.email}` })
+
+    try {
+        const { currentPassword, newPassword } = req.body
+        const user = await User.findById(id).select('password')
+        const isPassword = await bcrypt.compare(currentPassword, user.password)
+
+        if (isPassword) {
+            user.password = await bcrypt.hash(newPassword, 10)
+            await user.save()
+            return res.status(200).send({ message: 'Password has been updated.', type: 'success' })
+        }
+        else
+            return res.status(200).send({ message: 'Current password is not matching.', type: 'error' })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: 'Internal server error', type: 'error' })
+    }
+}
+
+const updateUserProfileImage = async (req, res) => {
+    let id = req.params.id
+
+    if (!isProvidedIdValid(id)) return res.status(404).send({ message: `No user with email ${req.body.email}` })
+
+    try {
+        const { url } = await cloudinary.uploader.upload(req.file.path)
+        const user = await User.findByIdAndUpdate(id, { photo: url }, { new: true })
+
+        return res.status(200).send({ data: user })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: 'Internal server error' })
+    }
+}
+
+module.exports = { createUser, deleteUser, getUser, getUsers, updateUser, updateUserPassword, updateUserProfileImage }

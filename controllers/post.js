@@ -13,12 +13,14 @@ const createPost = async (req, res) => {
 
     try {
         const { body, file } = req
-        const { url } = await cloudinary.uploader.upload(file.path)
-        const { filename } = file
+        const { public_id, secure_url: url } = await cloudinary.uploader.upload(file.path)
+        const { filename: name } = file
+        // You can use 'originalname' from file. If you want to save originalname in db.
 
         body.created_by = id
         body.photo = {
-            name: filename,
+            id: public_id,
+            name,
             url
         }
 
@@ -43,6 +45,10 @@ const deletePost = async (req, res) => {
 
     try {
         await Comment.deleteMany({ for_post: pid })
+
+        const { photo } = await Post.findById(pid)
+
+        await cloudinary.uploader.destroy(photo.id)
 
         await Post.findByIdAndDelete(pid)
 

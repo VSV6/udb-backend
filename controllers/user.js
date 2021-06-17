@@ -106,6 +106,11 @@ const updateUserProfileImage = async (req, res) => {
         const { url } = await cloudinary.uploader.upload(req.file.path)
         const user = await User.findByIdAndUpdate(id, { photo: url }, { new: true })
 
+        // const { body, file } = req
+        // const { public_id, secure_url: url } = await cloudinary.uploader.upload(file.path)
+        // const { filename: name } = file
+        // You can use 'originalname' from
+
         return res.status(200).send({ data: user })
     } catch (error) {
         console.log(error)
